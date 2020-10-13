@@ -20,7 +20,7 @@ public class FileServiceImpl implements FileService {
   public String uploadDir;
 
 @Override
-  public void uploadFile(MultipartFile file) {
+  public String uploadFile(MultipartFile file) {
 
     try {
       String name = String.format("%s.%s", RandomStringUtils.randomAlphanumeric(8), StringUtils.cleanPath(file.getOriginalFilename()));
@@ -28,6 +28,7 @@ public class FileServiceImpl implements FileService {
       Path copyLocation = Paths
           .get(uploadDir + File.separator + name);
       Files.copy(file.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
+      return copyLocation.toString();
     } catch (Exception e) {
       e.printStackTrace();
       throw new FileStorageException("Could not store file " + file.getOriginalFilename()

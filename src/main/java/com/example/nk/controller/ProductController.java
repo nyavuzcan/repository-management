@@ -24,9 +24,8 @@ public class ProductController {
       value = "/fileUpload",
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public String uploadFile(ProductRequest productRequest) {
-    fileService.uploadFile(productRequest.getMultipartFile());
-    return  "You successfully uploaded " + productRequest.getMultipartFile().getOriginalFilename() + "!";
+  public String uploadFile(MultipartFile multipartFile) {
+    return  fileService.uploadFile(multipartFile);
   }
 
 
