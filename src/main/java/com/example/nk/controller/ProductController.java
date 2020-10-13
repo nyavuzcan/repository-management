@@ -1,5 +1,6 @@
 package com.example.nk.controller;
 
+import com.example.nk.dto.ProductRequest;
 import com.example.nk.entities.Product;
 import com.example.nk.service.ProductService;
 import com.example.nk.serviceImpl.FileServiceImpl;
@@ -19,15 +20,13 @@ public class ProductController {
   @Autowired
   ProductService productService;
 
-  @PostMapping("/uploadFile")
-  public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-
-    fileService.uploadFile(file);
-
-    redirectAttributes.addFlashAttribute("message",
-        "You successfully uploaded " + file.getOriginalFilename() + "!");
-
-    return "redirect:/";
+  @RequestMapping(
+      value = "/fileUpload",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public String uploadFile(ProductRequest productRequest) {
+    fileService.uploadFile(productRequest.getMultipartFile());
+    return  "You successfully uploaded " + productRequest.getMultipartFile().getOriginalFilename() + "!";
   }
 
 
