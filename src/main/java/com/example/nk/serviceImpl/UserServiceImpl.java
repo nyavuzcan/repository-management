@@ -9,6 +9,7 @@ import com.example.nk.service.UserService;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 @Service
@@ -21,7 +22,8 @@ public class UserServiceImpl implements UserService {
   EmailSenderService emailSenderService;
   @Autowired
   Mapper mapper;
-
+  @Autowired
+  BCryptPasswordEncoder bCryptPasswordEncoder;
   @Override
   public UserEntity findUserByEmail(String email) {
     return userRepository.findByEmail(email);
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void saveNewUser(UserRequest userRequest) {
-    final String encryptedPassword = DigestUtils.md5DigestAsHex(userRequest.getPassword().getBytes());
+    final String encryptedPassword = bCryptPasswordEncoder.encode(userRequest.getPassword());
     userRequest.setPassword(encryptedPassword);
     UserEntity userEntity = mapper.map(userRequest,UserEntity.class);
     final UserEntity createdUser = userRepository.save(userEntity);
