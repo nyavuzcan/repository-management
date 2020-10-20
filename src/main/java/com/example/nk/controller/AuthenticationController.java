@@ -3,7 +3,9 @@ package com.example.nk.controller;
 import com.example.nk.dto.AuthenticationRequest;
 import com.example.nk.dto.AuthenticationResponse;
 import com.example.nk.dto.UserRequest;
+import com.example.nk.entities.ConfirmationTokenEntity;
 import com.example.nk.entities.UserEntity;
+import com.example.nk.service.ConfirmationTokenService;
 import com.example.nk.service.MyUserDetailsService;
 import com.example.nk.service.UserService;
 import com.example.nk.util.JwtUtil;
@@ -16,10 +18,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/authenticate")
@@ -27,6 +28,8 @@ public class AuthenticationController {
 
   @Autowired
   private AuthenticationManager authenticationManager;
+  @Autowired
+  private ConfirmationTokenService confirmationTokenService;
   @Autowired
   private MyUserDetailsService myUserDetailsService;
   @Autowired
@@ -61,6 +64,17 @@ public class AuthenticationController {
     userService.saveNewUser(userRequest);
 
     return "redirect:/sign-in";
+  }
+
+
+  @GetMapping("/confirm")
+  String confirmMail(@RequestParam("token") String token) {
+
+    Optional<ConfirmationTokenEntity> optionalConfirmationToken = Optional.ofNullable(confirmationTokenService.findConfirmationTokenByTokenEntity(token));
+
+    optionalConfirmationToken.ifPresent(userService::confirmUser);
+
+    return "/sign-in";
   }
 
 

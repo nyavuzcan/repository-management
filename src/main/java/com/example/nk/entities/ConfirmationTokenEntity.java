@@ -1,63 +1,63 @@
-package com.example.nk.entities;
+      package com.example.nk.entities;
 
 
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.UUID;
+      import javax.persistence.*;
+      import java.time.LocalDate;
+      import java.util.UUID;
 
-@Entity
-public class ConfirmationTokenEntity {
-  public ConfirmationTokenEntity() {
-  }
+      @Entity
+      public class ConfirmationTokenEntity {
+        public ConfirmationTokenEntity() {
+        }
 
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-  private String confirmationToken;
+        private String confirmationToken;
 
-  private LocalDate createdDate;
+        private LocalDate createdDate;
 
-  @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
-  @JoinColumn(nullable = false, name = "id")
-  private UserEntity user;
+        private UserEntity userEntity;
 
-  public ConfirmationTokenEntity(UserEntity user) {
-    this.user = user;
-    this.createdDate = LocalDate.now();
-    this.confirmationToken = UUID.randomUUID().toString();
-  }
+        public ConfirmationTokenEntity(UserEntity user) {
+          this.userEntity = user;
+          this.createdDate = LocalDate.now();
+          this.confirmationToken = UUID.randomUUID().toString();
+        }
 
-  public Long getId() {
-    return id;
-  }
+        public Long getId() {
+          return id;
+        }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+        public void setId(Long id) {
+          this.id = id;
+        }
 
-  public String getConfirmationToken() {
-    return confirmationToken;
-  }
+        public String getConfirmationToken() {
+          return confirmationToken;
+        }
 
-  public void setConfirmationToken(String confirmationToken) {
-    this.confirmationToken = confirmationToken;
-  }
+        public void setConfirmationToken(String confirmationToken) {
+          this.confirmationToken = confirmationToken;
+        }
 
-  public LocalDate getCreatedDate() {
-    return createdDate;
-  }
+        public LocalDate getCreatedDate() {
+          return createdDate;
+        }
 
-  public void setCreatedDate(LocalDate createdDate) {
-    this.createdDate = createdDate;
-  }
+        public void setCreatedDate(LocalDate createdDate) {
+          this.createdDate = createdDate;
+        }
 
-  public UserEntity getUser() {
-    return user;
-  }
+        @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
+        @JoinColumn(nullable = false, name = "user_id")
+        public UserEntity getUser() {
+          return userEntity;
+        }
 
-  public void setUser(UserEntity user) {
-    this.user = user;
-  }
-}
+        public void setUser(UserEntity user) {
+          this.userEntity = user;
+        }
+      }

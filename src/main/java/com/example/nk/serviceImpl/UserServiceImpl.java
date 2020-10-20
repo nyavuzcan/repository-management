@@ -17,6 +17,8 @@ public class UserServiceImpl implements UserService {
   @Autowired
   UserRepository userRepository;
   @Autowired
+  UserService userService;
+  @Autowired
   ConfirmationTokenService confirmationTokenService;
   @Autowired
   EmailSenderService emailSenderService;
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
 
     final ConfirmationTokenEntity confirmationToken = new ConfirmationTokenEntity(userEntity);
     confirmationTokenService.saveConfirmationToken(confirmationToken);
+    userService.sendConfirmationMail(userEntity.getEmail(), confirmationToken.getConfirmationToken());
   }
 
   @Override
@@ -57,7 +60,7 @@ public class UserServiceImpl implements UserService {
     mailMessage.setSubject("Mail Confirmation Link!");
     mailMessage.setFrom("<MAIL>");
     mailMessage.setText(
-        "Thank you for registering. Please click on the below link to activate your account." + "http://localhost:8080/sign-up/confirm?token="
+        "Thank you for registering. Please click on the below link to activate your account. " + "http://localhost:8080/authenticate/confirm?token="
             + token);
 
     emailSenderService.sendEmail(mailMessage);
