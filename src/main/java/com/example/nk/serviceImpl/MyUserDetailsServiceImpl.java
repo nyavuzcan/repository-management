@@ -24,10 +24,20 @@ public class MyUserDetailsServiceImpl implements MyUserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
     UserEntity userEntity = userRepository.findByUsername(userName);
-    return new User(userEntity.getUsername(),userEntity.getPassword(),new ArrayList<>());
+    if (userEntity!= null){
+      if (!userEntity.isEnabled()){
+        throw new UsernameNotFoundException("USER NOT CONFIRM");
+      }
+      return new User(userEntity.getUsername(),userEntity.getPassword(),new ArrayList<>());
+    }
+  else throw new UsernameNotFoundException("User not found");
   }
 
-
+/**
+ *  List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
+ *                 return buildUserForAuthentication(user, authorities);
+ *
+ */
 
 /*  @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

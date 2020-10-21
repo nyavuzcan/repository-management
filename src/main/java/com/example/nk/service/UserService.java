@@ -7,7 +7,7 @@ import com.example.nk.entities.UserEntity;
 public interface UserService {
   UserEntity findUserByEmail(String email);
 
-  void saveNewUser(UserRequest userRequest);
+  void saveNewUser(UserRequest userRequest) throws Exception;
 
   void confirmUser(ConfirmationTokenEntity confirmationToken);
 

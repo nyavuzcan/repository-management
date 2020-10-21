@@ -59,7 +59,7 @@ public class AuthenticationController {
 
   @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public String signUp(@RequestBody  UserRequest userRequest) {
+  public String signUp(@RequestBody  UserRequest userRequest) throws Exception {
 
     userService.saveNewUser(userRequest);
 
@@ -68,7 +68,7 @@ public class AuthenticationController {
 
 
   @GetMapping("/confirm")
-  String confirmMail(@RequestParam("token") String token) {
+  String confirmMail(@RequestParam("token") String token) throws Exception {
 
     Optional<ConfirmationTokenEntity> optionalConfirmationToken = Optional.ofNullable(confirmationTokenService.findConfirmationTokenByTokenEntity(token));
 

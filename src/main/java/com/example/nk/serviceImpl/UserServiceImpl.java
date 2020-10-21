@@ -6,6 +6,7 @@ import com.example.nk.entities.UserEntity;
 import com.example.nk.repository.UserRepository;
 import com.example.nk.service.ConfirmationTokenService;
 import com.example.nk.service.UserService;
+import com.example.nk.util.UserUtil;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -26,13 +27,28 @@ public class UserServiceImpl implements UserService {
   Mapper mapper;
   @Autowired
   BCryptPasswordEncoder bCryptPasswordEncoder;
+  @Autowired
+  UserUtil userUtil;
   @Override
   public UserEntity findUserByEmail(String email) {
     return userRepository.findByEmail(email);
   }
 
   @Override
-  public void saveNewUser(UserRequest userRequest) {
+  public void saveNewUser(UserRequest userRequest) throws Exception {
+    if (userUtil.isEmailUsing(userRequest.getEmail())){
+       UserEntity userEntity = userRepository.findByEmail(userRequest.getEmail());
+      if (!userEntity.isEnabled()) {
+        final ConfirmationTokenEntity confirmationToken = new ConfirmationTokenEntity(userEntity);
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        userService.sendConfirmationMail(userEntity.getEmail(), confirmationToken.getConfirmationToken());
+        throw new Exception("RE-SEND CONFIRM EMAIL");
+      }
+      throw new Exception("THIS EMAIL IS ALREADY TAKEN");
+    }
+
+    if (userUtil.isUsernameUsing(userRequest.getUsername())) throw new Exception("THIS USERNAME IS ALREADY TAKEN");
+
     final String encryptedPassword = bCryptPasswordEncoder.encode(userRequest.getPassword());
     userRequest.setPassword(encryptedPassword);
     UserEntity userEntity = mapper.map(userRequest,UserEntity.class);

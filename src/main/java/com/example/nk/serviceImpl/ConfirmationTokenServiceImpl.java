@@ -6,6 +6,8 @@ import com.example.nk.service.ConfirmationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
@@ -23,8 +25,13 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
   }
 
   @Override
-  public ConfirmationTokenEntity findConfirmationTokenByTokenEntity(String token) {
-    return confirmationTokenRepository.findByConfirmationToken(token);
+  public ConfirmationTokenEntity findConfirmationTokenByTokenEntity(String token) throws Exception {
+    ConfirmationTokenEntity confirmationTokenEntity = confirmationTokenRepository.findByConfirmationToken(token);
+      if (confirmationTokenEntity.getCreatedDate().before(new Date(System.currentTimeMillis()))) {
+        confirmationTokenRepository.deleteById(confirmationTokenEntity.getId());
+        throw new Exception("TOKEN EXPIRE");
+      }
+      return confirmationTokenEntity;
   }
 
 

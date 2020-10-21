@@ -3,6 +3,7 @@
 
       import javax.persistence.*;
       import java.time.LocalDate;
+      import java.util.Date;
       import java.util.UUID;
 
       @Entity
@@ -17,13 +18,13 @@
 
         private String confirmationToken;
 
-        private LocalDate createdDate;
+        private Date expiredDate;
 
         private UserEntity userEntity;
 
         public ConfirmationTokenEntity(UserEntity user) {
           this.userEntity = user;
-          this.createdDate = LocalDate.now();
+          this.expiredDate = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
           this.confirmationToken = UUID.randomUUID().toString();
         }
 
@@ -43,12 +44,12 @@
           this.confirmationToken = confirmationToken;
         }
 
-        public LocalDate getCreatedDate() {
-          return createdDate;
+        public Date getCreatedDate() {
+          return expiredDate;
         }
 
-        public void setCreatedDate(LocalDate createdDate) {
-          this.createdDate = createdDate;
+        public void setCreatedDate(Date createdDate) {
+          this.expiredDate = createdDate;
         }
 
         @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
