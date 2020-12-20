@@ -36,6 +36,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void saveNewUser(UserRequest userRequest) throws Exception {
+
+
     if (userUtil.isEmailUsing(userRequest.getEmail())){
        UserEntity userEntity = userRepository.findByEmail(userRequest.getEmail());
       if (!userEntity.isEnabled()) {
