@@ -40,7 +40,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         .antMatchers("/authenticate/verify").permitAll()
         .antMatchers("/authenticate/register").permitAll()
         .antMatchers("/authenticate/confirm").permitAll()
-        .anyRequest().permitAll()
+        .anyRequest().authenticated()
 
 
         .and().sessionManagement()
