@@ -1,5 +1,6 @@
 package com.example.nk.serviceImpl;
 
+import com.example.nk.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

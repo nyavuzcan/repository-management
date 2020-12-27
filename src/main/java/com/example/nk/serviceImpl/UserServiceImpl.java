@@ -5,6 +5,7 @@ import com.example.nk.entities.ConfirmationTokenEntity;
 import com.example.nk.entities.UserEntity;
 import com.example.nk.repository.UserRepository;
 import com.example.nk.service.ConfirmationTokenService;
+import com.example.nk.service.EmailSenderService;
 import com.example.nk.service.UserService;
 import com.example.nk.util.UserUtil;
 import com.github.dozermapper.core.Mapper;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
+
 @Service
 public class UserServiceImpl implements UserService {
   @Autowired

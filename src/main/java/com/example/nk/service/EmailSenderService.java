@@ -1,4 +1,4 @@
-package com.example.nk.serviceImpl;
+package com.example.nk.service;
 
 import org.springframework.mail.SimpleMailMessage;
 
